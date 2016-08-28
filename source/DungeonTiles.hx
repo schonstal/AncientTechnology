@@ -40,9 +40,6 @@ class DungeonTiles
       position.x += direction.x;
       position.y += direction.y;
 
-      var drawTorch:Bool = false;
-      if(i > 0 && (i % 100) == 0) drawTorch = true;
-
       var localSize = BRUSH_SIZE + ((new FlxRandom().bool(5) || i == 0) ? 1 : 0);
       for(x in 0...localSize) {
         for(y in 0...localSize) {
