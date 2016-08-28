@@ -6,3 +6,4 @@
 /assets/data/*.hash
 *.sw*
 Thumbs.db
+*.hxml
