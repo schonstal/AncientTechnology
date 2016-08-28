@@ -1,2 +1,5 @@
-# AncientTechnology
-Ludum Dare 36, take two
+# Ancient Technology
+
+Isometric Shooter
+
+Made for Ludum Dare 36
