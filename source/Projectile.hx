@@ -35,7 +35,7 @@ class Projectile extends FlxSpriteGroup
     shadow.offset.x = 1;
     shadow.solid = false;
     add(shadow);
-    
+
     particles = new Array<FlxSprite>();
     particleGroup = new FlxSpriteGroup();
     add(particleGroup);
