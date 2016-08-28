@@ -37,11 +37,11 @@ class Player extends FlxSprite
   public function new() {
     super();
     loadGraphic("assets/images/player.png", true, 32, 32);
-    setFacingFlip(FlxObject.LEFT, true, false);
-    setFacingFlip(FlxObject.RIGHT, false, false);
-    animation.add("walk", [4,5,6,7,8,9,10,11], 15, true);
-    animation.add("walkBackwards", [4,11,10,9,8,7,6,5], 15, true);
-    animation.add("idle", [0,0,1,2,3,3], 10);
+    setFacingFlip(FlxObject.RIGHT, true, false);
+    setFacingFlip(FlxObject.LEFT, false, false);
+    animation.add("walk", [8,9,10,11,12,13,14,15], 10, true);
+    animation.add("walkBackwards", [23,16,17,18,19,21,22], 10, true);
+    animation.add("idle", [0,1,2,3], 8);
     animation.callback = onAnimate;
     width = 22;
     height = 12;
@@ -83,7 +83,7 @@ class Player extends FlxSprite
     if(direction.length > 0) {
       velocity.x = direction.normalize().x * SPEED;
       velocity.y = direction.normalize().y * SPEED;
-      if((velocity.x < 0 && facing == FlxObject.RIGHT) || (velocity.x > 0 && facing == FlxObject.LEFT)) {
+      if(walkingBackwards()) {
         animation.play("walkBackwards");
       } else {
         animation.play("walk");
@@ -92,6 +92,12 @@ class Player extends FlxSprite
       velocity.x = velocity.y = 0;
       animation.play("idle");
     }
+  }
+
+  function walkingBackwards():Bool {
+    return (velocity.x < 0 && facing == FlxObject.RIGHT) ||
+           (velocity.x > 0 && facing == FlxObject.LEFT) ||
+           (velocity.x == 0 && velocity.y < 0);
   }
 
   private function onAnimate(name:String, frame:Int, frameIndex:Int):Void {
