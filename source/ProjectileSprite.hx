@@ -1,32 +1,56 @@
 package;
 
-import flixel.group.FlxSpriteGroup;
-
 import flixel.FlxSprite;
 import flixel.FlxG;
-
-import flixel.math.FlxRandom;
-import flixel.util.FlxStringUtil;
+import flixel.FlxObject;
 import flixel.math.FlxVector;
-import flixel.util.FlxTimer;
-
-import flixel.tile.FlxTilemap;
 
 class ProjectileSprite extends FlxSprite {
+  var WIDTH = 6;
+  var HEIGHT = 6;
+  var dangerTimer:Float = 0;
+  var dangerTime:Float = 0.04;
+
   public var onCollisionCallback:Void->Void;
 
   public function new() {
     super();
-    loadGraphic("assets/images/player_magic_ball.png", false, 32, 32);
-    animation.add("pulse", [0,1,2,3], 15);
+
+    loadGraphic('assets/images/projectiles/projectile.png', true, 16, 16);
+    animation.add("pulse", [0, 1, 2], 10);
     animation.play("pulse");
-    width = 20;
-    height = 10;
-    offset.y = 22;
-    offset.x = 6;
+
+    width = WIDTH;
+    height = HEIGHT;
   }
 
   public function onCollide() {
     if(onCollisionCallback != null) onCollisionCallback();
+  }
+
+  public function initialize(direction:FlxVector, speed:Float = Projectile.SPEED):Void {
+    dangerTimer = 0;
+    velocity.x = direction.x * speed;
+    velocity.y = direction.y * speed;
+  }
+
+  override public function updateHitbox():Void {
+    var newWidth:Float = scale.x * WIDTH;
+    var newHeight:Float = scale.y * HEIGHT;
+
+    width = newWidth;
+    height = newHeight;
+    offset.set( - ((newWidth - frameWidth) * 0.5), - ((newHeight - frameHeight) * 0.5));
+    centerOrigin();
+  }
+
+  public function isDangerous():Bool {
+    return dangerTimer >= dangerTime;
+  }
+
+  override public function update(elapsed:Float):Void {
+    dangerTimer += elapsed;
+
+    super.update(elapsed);
   }
 }

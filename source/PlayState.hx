@@ -11,12 +11,11 @@ class PlayState extends FlxState
   var player:Player;
   var dungeon:Dungeon;
   var dungeonObjects:FlxTypedGroup<FlxObject>;
-  var projectiles:FlxTypedGroup<FlxObject>;
 
   override public function create():Void {
     super.create();
     configure();
-    initializeProjectiles();
+    registerServices();
     createDungeon();
     createPlayer();
     fillDungeon();
@@ -31,16 +30,16 @@ class PlayState extends FlxState
     super.update(deltaTime);
     FlxG.collide(player, dungeon.collisionTilemap);
 
-    FlxG.collide(G.projectiles, dungeon.wallTilemap, function(a,b):Void {
-      if(Std.is(a, ProjectileSprite)) a.onCollide();
-    });
+    //FlxG.collide(G.projectiles, dungeon.wallTilemap, function(a,b):Void {
+    //  if(Std.is(a, ProjectileSprite)) a.onCollide();
+    //});
 
     dungeonObjects.sort(FlxSort.byY, FlxSort.ASCENDING);
   }
 
-  function initializeProjectiles() {
-    Projectile.init();
-    G.projectiles = new FlxTypedGroup<FlxObject>();
+  function registerServices() {
+    Reg.playerProjectileService = new Service<Projectile>();
+    Reg.enemyProjectileService = new Service<Projectile>();
   }
 
   function createDungeon() {
@@ -52,6 +51,8 @@ class PlayState extends FlxState
 
   function fillDungeon() {
     add(dungeonObjects);
+    add(Reg.playerProjectileService.group);
+    add(Reg.enemyProjectileService.group);
     add(dungeon.wallTopTilemap);
   }
 
