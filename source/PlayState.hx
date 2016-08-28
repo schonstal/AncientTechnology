@@ -11,6 +11,7 @@ class PlayState extends FlxState
   var player:Player;
   var dungeon:Dungeon;
   var dungeonObjects:FlxTypedGroup<FlxObject>;
+  var reticle:Reticle;
 
   override public function create():Void {
     super.create();
@@ -38,8 +39,8 @@ class PlayState extends FlxState
   }
 
   function registerServices() {
-    Reg.playerProjectileService = new Service<Projectile>();
-    Reg.enemyProjectileService = new Service<Projectile>();
+    Reg.playerProjectileService = new ProjectileService();
+    Reg.enemyProjectileService = new ProjectileService();
   }
 
   function createDungeon() {

@@ -8,6 +8,6 @@ import Type;
 class Reg {
   public static var random:FlxRandom = new FlxRandom();
 
-  public static var playerProjectileService:Service<Projectile>;
-  public static var enemyProjectileService:Service<Projectile>;
+  public static var playerProjectileService:ProjectileService;
+  public static var enemyProjectileService:ProjectileService;
 }

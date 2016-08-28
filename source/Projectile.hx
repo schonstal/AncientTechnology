@@ -15,6 +15,7 @@ class Projectile extends FlxSpriteGroup
   public var direction:FlxVector;
   public var physical = true;
 
+  var shadow:FlxSprite;
   var projectileSprite:ProjectileSprite;
   var explosionSprite:FlxSprite;
 
@@ -27,10 +28,12 @@ class Projectile extends FlxSpriteGroup
     this.y = Y;
     this.direction = direction;
 
+    initializeShadow();
     initializeProjectile(direction);
     initializeExplosion();
 
     physical = true;
+    exists = projectileSprite.exists = shadow.exists = explosionSprite.exists = true;
   }
 
   public function onCollide():Void {
@@ -51,6 +54,17 @@ class Projectile extends FlxSpriteGroup
 
   public static function handleCollision(other, projectile):Void {
     cast(projectile, ProjectileSprite).onCollide();
+  }
+
+  function initializeShadow() {
+    if (shadow == null) {
+      shadow = new FlxSprite();
+      shadow.loadGraphic("assets/images/projectiles/shadow.png");
+      shadow.solid = false;
+      add(shadow);
+    }
+    shadow.x = this.x;
+    shadow.y = this.y;
   }
 
   function initializeProjectile(direction:FlxVector) {

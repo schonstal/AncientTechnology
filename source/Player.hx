@@ -31,8 +31,8 @@ class Player extends FlxSprite
   inline static var RECOIL_DISTANCE = -20;
   inline static var RECOIL_DURATION = 0.4;
 
-  public var invulnerable:Bool = true;
-  public var started:Bool = true;
+  public var weapons:Array<Weapon>;
+  public var activeWeapon:Weapon;
 
   public function new() {
     super();
@@ -47,24 +47,20 @@ class Player extends FlxSprite
     height = 12;
     offset.x = 4;
     offset.y = 20;
+
+    weapons = new Array<Weapon>();
+    weapons.push(new PlasmaWeapon());
+    activeWeapon = weapons[0];
   }
 
-  public override function update(deltaTime:Float):Void {
-    if(!started) {
-      velocity.x = velocity.y = 0;
-      animation.play("idle");
-      super.update(deltaTime);
-      return;
-    }
-
+  public override function update(deltaTime:Float) {
     facing = FlxG.mouse.x < x + width/2 ? FlxObject.LEFT : FlxObject.RIGHT;
-
     processMovement();
-
+    updateWeapon(deltaTime);
     super.update(deltaTime);
   }
 
-  private function processMovement():Void {
+  function processMovement() {
     var direction:FlxVector = new FlxVector(0,0);
 
     if(FlxG.keys.pressed.W) {
@@ -94,13 +90,19 @@ class Player extends FlxSprite
     }
   }
 
+  function updateWeapon(deltaTime:Float) {
+    if (activeWeapon != null) {
+      activeWeapon.update(deltaTime);
+    }
+  }
+
   function walkingBackwards():Bool {
     return (velocity.x < 0 && facing == FlxObject.RIGHT) ||
            (velocity.x > 0 && facing == FlxObject.LEFT) ||
            (velocity.x == 0 && velocity.y < 0);
   }
 
-  private function onAnimate(name:String, frame:Int, frameIndex:Int):Void {
+  function onAnimate(name:String, frame:Int, frameIndex:Int) {
     if (name == "walk" || name == "walkBackwards") {
       if (frame == 0 || frame == 4) {
         FlxG.sound.play("assets/sounds/footsteps/" + new FlxRandom().int(1,2) + ".wav", 0.3);
