@@ -42,8 +42,6 @@ class Projectile extends FlxSpriteGroup
     explosionSprite.visible = true;
     explosionSprite.animation.play("explode");
     projectileSprite.exists = false;
-    //FlxG.camera.shake(0.02, 0.3);
-    //FlxG.sound.play("assets/sounds/orb_explode.wav");
   }
 
   function explosionFinished(_:String):Void {
