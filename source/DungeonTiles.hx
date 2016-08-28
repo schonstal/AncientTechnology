@@ -54,10 +54,6 @@ class DungeonTiles
           } else {
             tiles[localY][localX] = ((localY + localX) % 2 == 0 ? 1 : 2);
           }
-          if(drawTorch) {
-            drawTorch = false;
-            G.torchLocations.push(new FlxPoint(position.x - Dungeon.SIZE/2, position.y - Dungeon.SIZE/2));
-          }
         }
       }
       changeDirection();

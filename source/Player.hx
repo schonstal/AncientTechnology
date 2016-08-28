@@ -32,20 +32,10 @@ class Player extends FlxSprite
   inline static var RECOIL_DURATION = 0.4;
 
   public var invulnerable:Bool = true;
-  public var started:Bool = false;
+  public var started:Bool = true;
 
-  var dungeonObjects:FlxTypedGroup<FlxObject>;
-
-  var shooting:Bool = false;
-
-  var reticle:Reticle;
-
-  public function new(dungeonObjects:FlxTypedGroup<FlxObject>, reticle:Reticle) {
+  public function new() {
     super();
-    this.dungeonObjects = dungeonObjects;
-    //I'd say I'm sorry but I'm not
-    this.reticle = reticle;
-
     loadGraphic("assets/images/player.png", true, 32, 32);
     setFacingFlip(FlxObject.LEFT, true, false);
     setFacingFlip(FlxObject.RIGHT, false, false);
@@ -90,13 +80,9 @@ class Player extends FlxSprite
       direction.x = 1;
     }
 
-    if(FlxG.mouse.justPressed) {
-      shootProjectile();
-    }
-
     if(direction.length > 0) {
-      velocity.x = direction.normalize().x * SPEED * (shooting ? 0.5 : 1);
-      velocity.y = direction.normalize().y * SPEED * (shooting ? 0.5 : 1);
+      velocity.x = direction.normalize().x * SPEED;
+      velocity.y = direction.normalize().y * SPEED;
       if((velocity.x < 0 && facing == FlxObject.RIGHT) || (velocity.x > 0 && facing == FlxObject.LEFT)) {
         animation.play("walkBackwards");
       } else {
@@ -106,13 +92,6 @@ class Player extends FlxSprite
       velocity.x = velocity.y = 0;
       animation.play("idle");
     }
-  }
-
-  private function shootProjectile():Void {
-    if(shooting) return;
-    reticle.deactivate();
-    shooting = true;
-    FlxG.sound.play("assets/sounds/charge_orb.wav", 0.6);
   }
 
   private function onAnimate(name:String, frame:Int, frameIndex:Int):Void {
