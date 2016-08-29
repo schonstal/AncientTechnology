@@ -7,6 +7,7 @@ import flixel.util.FlxTimer;
 import flixel.FlxObject;
 
 import flixel.math.FlxVector;
+import flash.display.BlendMode;
 
 class Projectile extends FlxSpriteGroup
 {
@@ -36,6 +37,16 @@ class Projectile extends FlxSpriteGroup
     exists = projectileSprite.exists = shadow.exists = explosionSprite.exists = true;
   }
 
+  public override function update(deltaTime:Float) {
+    super.update(deltaTime);
+    updateShadow();
+  }
+
+  function updateShadow() {
+    shadow.x = this.projectileSprite.x;
+    shadow.y = this.projectileSprite.y + 10;
+  }
+
   public function onCollide():Void {
     if(!physical) return;
     physical = false;
@@ -59,9 +70,11 @@ class Projectile extends FlxSpriteGroup
   function initializeShadow() {
     if (shadow == null) {
       shadow = new FlxSprite();
-      shadow.loadGraphic("assets/images/projectiles/shadow.png");
+      shadow.loadGraphic("assets/images/projectile_glow.png");
+      shadow.blend = BlendMode.ADD;
+      shadow.alpha = 0.2;
       shadow.solid = false;
-      add(shadow);
+      Reg.dungeon.shadowGroup.add(shadow);
     }
     shadow.x = this.x;
     shadow.y = this.y;
