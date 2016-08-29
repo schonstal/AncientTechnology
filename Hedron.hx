@@ -7,6 +7,7 @@ import flixel.util.FlxTimer;
 import flixel.FlxObject;
 
 import flixel.math.FlxVector;
+import flixel.math.FlxPoint;
 
 class Hedron extends FlxSpriteGroup
 {
@@ -18,6 +19,7 @@ class Hedron extends FlxSpriteGroup
   var weapon:Weapon;
 
   var oscillator:Float;
+  var originalOffset:Float;
 
   public function new() {
     super();
@@ -25,14 +27,23 @@ class Hedron extends FlxSpriteGroup
     initializeBody();
   }
 
-  function fire() { }
+  function fire() {
+
+  }
 
   public override function update(deltaTime:Float) {
     super.update(deltaTime);
-    shadow.x = body.x;
-    shadow.y = body.y + 10;
+    updateOscillation(deltaTime);
+  }
+
+  function updateOscillation(deltaTime:Float) {
     oscillator += deltaTime;
-    body.offset.y = Math.sin(oscillator * 2) * 2;
+    body.offset.y = originalOffset + Math.sin(oscillator * 3);
+  }
+
+  public function updateShadow() {
+    shadow.x = body.x;
+    shadow.y = body.y;
   }
 
   function initializeShadow() {
@@ -44,16 +55,27 @@ class Hedron extends FlxSpriteGroup
     }
     shadow.x = this.x;
     shadow.y = this.y;
+    shadow.updateHitbox();
   }
 
   function initializeBody() {
     if (body == null) {
       body = new FlxSprite();
-      body.loadGraphic("assets/images/projectiles.png", true, 32, 32);
+      body.loadGraphic("assets/images/hedron.png", true, 32, 32);
+      body.animation.add("idle", [0]);
+      body.animation.add("fire", [1, 1, 2, 3, 4], 20, false);
       body.solid = false;
       add(body);
     }
     body.x = this.x;
     body.y = this.y;
+
+    body.offset.x = body.width/2 - shadow.width/2;
+    body.offset.y = body.height/2 - shadow.width/2 + 16;
+
+    body.width = shadow.width;
+    body.height = shadow.height;
+
+    originalOffset = body.offset.y;
   }
 }

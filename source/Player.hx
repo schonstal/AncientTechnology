@@ -89,8 +89,13 @@ class Player extends FlxSpriteGroup
       FlxG.mouse.x - playerSprite.getMidpoint().x,
       FlxG.mouse.y - playerSprite.getMidpoint().y
     ).normalize();
-    hedron.x = playerSprite.x + direction.x * 10;
-    hedron.y = playerSprite.y + direction.y * 10;
+
+    var magnitude:Float = 18;
+    //magnitude = magnitude - Math.abs(direction.y) * magnitude / 2;
+
+    hedron.x = shadow.getMidpoint().x + direction.x * magnitude - hedron.width/2;
+    hedron.y = shadow.getMidpoint().y + direction.y * magnitude - hedron.height/2;
+    hedron.updateShadow();
   }
 
   function initializeSprite() {
