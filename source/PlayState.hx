@@ -36,6 +36,10 @@ class PlayState extends FlxState
     });
 
     dungeonObjects.sort(FlxSort.byY, FlxSort.ASCENDING);
+
+    if (FlxG.keys.justPressed.Q) {
+      FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
+    }
   }
 
   function registerServices() {
@@ -66,8 +70,6 @@ class PlayState extends FlxState
 
   function configure() {
     FlxG.mouse.visible = false;
-    FlxG.debugger.drawDebug = true;
-    FlxG.debugger.visible = true;
   }
 
   function setWorldBounds() {

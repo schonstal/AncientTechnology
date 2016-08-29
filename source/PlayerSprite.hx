@@ -26,6 +26,7 @@ class PlayerSprite extends FlxSprite
 
   public override function update(deltaTime:Float) {
     facing = FlxG.mouse.x < x + width/2 ? FlxObject.LEFT : FlxObject.RIGHT;
+    offset.x = (facing == FlxObject.RIGHT ? 4 : 6);
     super.update(deltaTime);
   }
 

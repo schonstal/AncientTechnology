@@ -24,9 +24,7 @@ class Player extends FlxSpriteGroup
 {
   inline static var SPEED = 100;
 
-  public var weapons:Array<Weapon>;
-  public var activeWeapon:Weapon;
-
+  public var hedron:Hedron;
   public var playerSprite:PlayerSprite;
   var shadow:FlxSprite;
 
@@ -34,14 +32,14 @@ class Player extends FlxSpriteGroup
     super();
     initializeShadow();
     initializeSprite();
-    initializeWeapons();
+    initializeHedron();
   }
 
   public override function update(deltaTime:Float) {
     processMovement();
-    updateWeapon(deltaTime);
     super.update(deltaTime);
     updateShadow();
+    updateHedron();
   }
 
   function processMovement() {
@@ -74,12 +72,6 @@ class Player extends FlxSpriteGroup
     }
   }
 
-  function updateWeapon(deltaTime:Float) {
-    if (activeWeapon != null) {
-      activeWeapon.update(deltaTime);
-    }
-  }
-
   function initializeShadow() {
     shadow = new FlxSprite();
     shadow.loadGraphic("assets/images/player_shadow.png");
@@ -88,8 +80,17 @@ class Player extends FlxSpriteGroup
   }
 
   function updateShadow() {
-    shadow.x = playerSprite.x + (playerSprite.facing == FlxObject.RIGHT ? 2 : 4);
+    shadow.x = playerSprite.x + 2;
     shadow.y = playerSprite.y + 7;
+  }
+
+  function updateHedron() {
+    var direction:FlxVector = new FlxVector(
+      FlxG.mouse.x - playerSprite.getMidpoint().x,
+      FlxG.mouse.y - playerSprite.getMidpoint().y
+    ).normalize();
+    hedron.x = playerSprite.x + direction.x * 10;
+    hedron.y = playerSprite.y + direction.y * 10;
   }
 
   function initializeSprite() {
@@ -97,9 +98,8 @@ class Player extends FlxSpriteGroup
     add(playerSprite);
   }
 
-  function initializeWeapons() {
-    weapons = new Array<Weapon>();
-    weapons.push(new PlasmaWeapon());
-    activeWeapon = weapons[0];
+  function initializeHedron() {
+    hedron = new Hedron();
+    add(hedron);
   }
 }

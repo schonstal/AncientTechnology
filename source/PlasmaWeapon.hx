@@ -15,7 +15,7 @@ class PlasmaWeapon extends Weapon
     fireRate = 0.25;
   }
 
-  override function fire() {
+  override function fire(x:Float, y:Float) {
     var direction = new FlxVector(FlxG.mouse.x - x, FlxG.mouse.y - y).normalize();
     Reg.playerProjectileService.spawn(x, y, direction);
   }

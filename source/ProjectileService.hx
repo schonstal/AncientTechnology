@@ -16,13 +16,13 @@ class ProjectileService {
   public function spawn(X:Float, Y:Float, direction:FlxVector):Projectile {
     for(object in objects) {
       if(!object.exists) {
+        object.initialize(X, Y, direction);
         return object;
       }
     }
 
     var object:Projectile = new Projectile();
     objects.push(object);
-
     group.add(object);
 
     object.initialize(X, Y, direction);

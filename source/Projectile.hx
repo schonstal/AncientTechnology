@@ -43,8 +43,8 @@ class Projectile extends FlxSpriteGroup
   }
 
   function updateShadow() {
-    shadow.x = this.projectileSprite.x;
-    shadow.y = this.projectileSprite.y + 10;
+    shadow.x = projectileSprite.x - shadow.width/2 - projectileSprite.width/2;
+    shadow.y = projectileSprite.y + 5;
   }
 
   public function onCollide():Void {
@@ -56,6 +56,7 @@ class Projectile extends FlxSpriteGroup
     explosionSprite.visible = true;
     explosionSprite.animation.play("explode");
     projectileSprite.exists = false;
+    shadow.exists = false;
   }
 
   function explosionFinished(_:String):Void {
@@ -96,7 +97,7 @@ class Projectile extends FlxSpriteGroup
     if (explosionSprite == null) {
       explosionSprite = new FlxSprite();
       explosionSprite.loadGraphic("assets/images/projectile_explosions.png", true, 32, 32);
-      explosionSprite.animation.add("explode", [0, 1, 2, 3], 10, false);
+      explosionSprite.animation.add("explode", [0, 1, 2, 3], 15, false);
       explosionSprite.blend = BlendMode.ADD;
       explosionSprite.solid = false;
       explosionSprite.animation.finishCallback = explosionFinished;
