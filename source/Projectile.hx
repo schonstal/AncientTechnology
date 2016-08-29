@@ -95,8 +95,9 @@ class Projectile extends FlxSpriteGroup
   function initializeExplosion() {
     if (explosionSprite == null) {
       explosionSprite = new FlxSprite();
-      explosionSprite.loadGraphic('assets/images/projectiles/hit.png', true, 32, 32);
-      explosionSprite.animation.add("explode", [0, 1, 2, 3, 4, 5], 15, false);
+      explosionSprite.loadGraphic("assets/images/projectile_explosions.png", true, 32, 32);
+      explosionSprite.animation.add("explode", [0, 1, 2, 3], 10, false);
+      explosionSprite.blend = BlendMode.ADD;
       explosionSprite.solid = false;
       explosionSprite.animation.finishCallback = explosionFinished;
       add(explosionSprite);
