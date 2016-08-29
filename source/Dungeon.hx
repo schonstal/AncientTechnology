@@ -7,6 +7,7 @@ import flixel.util.FlxStringUtil;
 
 import flixel.tile.FlxTilemap;
 import flixel.tile.FlxBaseTilemap;
+import flixel.group.FlxSpriteGroup;
 
 class Dungeon extends FlxGroup
 {
@@ -16,15 +17,15 @@ class Dungeon extends FlxGroup
   public var wallTopTilemap:FlxTilemap;
   public var wallTilemap:FlxTilemap;
   public var collisionTilemap:FlxTilemap;
+  public var groundTilemap:FlxTilemap;
+  public var drapedTilemap:FlxTilemap;
+  public var drapedWallTilemap:FlxTilemap;
+  public var shadowGroup:FlxSpriteGroup;
 
   var dungeonTiles:DungeonTiles;
   var drapedTiles:DrapedTiles;
   var isometricWalls:IsometricWalls;
   var isometricTops:IsometricTops;
-
-  var groundTilemap:FlxTilemap;
-  var drapedTilemap:FlxTilemap;
-  var drapedWallTilemap:FlxTilemap;
 
   public function new() {
     super();
@@ -55,6 +56,9 @@ class Dungeon extends FlxGroup
     );
     collisionTilemap.x = groundTilemap.x;
     collisionTilemap.y = groundTilemap.y;
+
+    shadowGroup = new FlxSpriteGroup();
+    add(shadowGroup);
 
     isometricWalls = new IsometricWalls(dungeonTiles);
     wallTilemap = new FlxTilemap();

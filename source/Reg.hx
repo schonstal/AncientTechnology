@@ -10,4 +10,5 @@ class Reg {
 
   public static var playerProjectileService:ProjectileService;
   public static var enemyProjectileService:ProjectileService;
+  public static var dungeon:Dungeon;
 }

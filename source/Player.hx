@@ -28,9 +28,11 @@ class Player extends FlxSpriteGroup
   public var activeWeapon:Weapon;
 
   public var playerSprite:PlayerSprite;
+  var shadow:FlxSprite;
 
   public function new() {
     super();
+    initializeShadow();
     initializeSprite();
     initializeWeapons();
   }
@@ -39,6 +41,7 @@ class Player extends FlxSpriteGroup
     processMovement();
     updateWeapon(deltaTime);
     super.update(deltaTime);
+    updateShadow();
   }
 
   function processMovement() {
@@ -75,6 +78,18 @@ class Player extends FlxSpriteGroup
     if (activeWeapon != null) {
       activeWeapon.update(deltaTime);
     }
+  }
+
+  function initializeShadow() {
+    shadow = new FlxSprite();
+    shadow.loadGraphic("assets/images/player_shadow.png");
+    shadow.solid = false;
+    Reg.dungeon.shadowGroup.add(shadow);
+  }
+
+  function updateShadow() {
+    shadow.x = playerSprite.x + (playerSprite.facing == FlxObject.RIGHT ? 2 : 4);
+    shadow.y = playerSprite.y + 7;
   }
 
   function initializeSprite() {
