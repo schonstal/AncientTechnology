@@ -71,20 +71,23 @@ class Projectile extends FlxSpriteGroup
   function initializeShadow() {
     if (shadow == null) {
       shadow = new FlxSprite();
-      shadow.loadGraphic("assets/images/projectile_glow.png");
-      shadow.blend = BlendMode.ADD;
-      shadow.alpha = 0.2;
+      shadow.loadGraphic("assets/images/projectile_shadow.png");
+//      shadow.blend = BlendMode.ADD;
+//      shadow.alpha = 0.2;
       shadow.solid = false;
       Reg.dungeon.shadowGroup.add(shadow);
     }
     shadow.x = this.x;
     shadow.y = this.y;
 
+    /*
     shadow.width = 6;
     shadow.height = 6;
 
     shadow.offset.x = 29 - 3;
     shadow.offset.y = 20 - 3;
+    */
+    shadow.offset.x = 1;
   }
 
   function initializeProjectile(direction:FlxVector) {
