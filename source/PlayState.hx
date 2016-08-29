@@ -4,13 +4,14 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxObject;
 import flixel.util.FlxSort;
+import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
 
 class PlayState extends FlxState
 {
   var player:Player;
   var dungeon:Dungeon;
-  var dungeonObjects:FlxTypedGroup<FlxObject>;
+  var dungeonObjects:FlxSpriteGroup;
   var reticle:Reticle;
 
   override public function create():Void {
@@ -21,7 +22,7 @@ class PlayState extends FlxState
     createPlayer();
     fillDungeon();
     add(new Reticle());
-    add(new CameraObject(player));
+    add(new CameraObject(player.playerSprite));
 
     setWorldBounds();
   }
@@ -47,7 +48,7 @@ class PlayState extends FlxState
     dungeon = new Dungeon();
     add(dungeon);
 
-    dungeonObjects = new FlxTypedGroup<FlxObject>();
+    dungeonObjects = new FlxSpriteGroup();
   }
 
   function fillDungeon() {
