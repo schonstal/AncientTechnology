@@ -30,6 +30,11 @@ class Player extends FlxSpriteGroup
     super.update(deltaTime);
     updateShadow();
     updateHedron();
+    sortEntities();
+  }
+
+  function sortEntities() {
+    sort(FlxSort.byY, FlxSort.ASCENDING);
   }
 
   function processMovement() {
@@ -85,8 +90,6 @@ class Player extends FlxSpriteGroup
     hedron.x = shadow.getMidpoint().x + direction.x * magnitude - hedron.width/2;
     hedron.y = shadow.getMidpoint().y + direction.y * magnitude - hedron.height/2;
     hedron.updateShadow();
-
-    sort(FlxSort.byY, FlxSort.ASCENDING);
   }
 
   function initializeSprite() {
