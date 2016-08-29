@@ -91,7 +91,6 @@ class Player extends FlxSpriteGroup
     ).normalize();
 
     var magnitude:Float = 18;
-    //magnitude = magnitude - Math.abs(direction.y) * magnitude / 2;
 
     hedron.x = shadow.getMidpoint().x + direction.x * magnitude - hedron.width/2;
     hedron.y = shadow.getMidpoint().y + direction.y * magnitude - hedron.height/2;
