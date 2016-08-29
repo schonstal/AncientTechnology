@@ -16,8 +16,8 @@ class ProjectileSprite extends FlxSprite {
   public function new() {
     super();
 
-    loadGraphic('assets/images/projectiles/projectile.png', true, 16, 16);
-    animation.add("pulse", [0, 1, 2], 10);
+    loadGraphic('assets/images/projectiles.png', true, 32, 32);
+    animation.add("pulse", [0, 1], 10);
     animation.play("pulse");
 
     width = WIDTH;
