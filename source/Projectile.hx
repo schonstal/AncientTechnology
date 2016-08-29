@@ -51,8 +51,12 @@ class Projectile extends FlxSpriteGroup
     if(!physical) return;
     physical = false;
 
-    explosionSprite.x = projectileSprite.x - 5;
-    explosionSprite.y = projectileSprite.y - 5;
+    explosionSprite.width = projectileSprite.width;
+    explosionSprite.height = projectileSprite.height;
+    explosionSprite.offset.x = projectileSprite.offset.x;
+    explosionSprite.offset.y = projectileSprite.offset.y;
+    explosionSprite.x = projectileSprite.x;
+    explosionSprite.y = projectileSprite.y;
     explosionSprite.visible = true;
     explosionSprite.animation.play("explode");
     projectileSprite.exists = false;

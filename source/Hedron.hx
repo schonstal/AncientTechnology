@@ -1,5 +1,6 @@
 package;
 
+import flash.display.BlendMode;
 import flixel.group.FlxSpriteGroup;
 import flixel.FlxSprite;
 import flixel.FlxG;
@@ -16,6 +17,7 @@ class Hedron extends FlxSpriteGroup
   var shadow:FlxSprite;
   var body:FlxSprite;
   var weapon:Weapon;
+  var muzzleFlash:FlxSprite;
 
   var oscillator:Float;
   var originalOffset:Float;
@@ -24,12 +26,14 @@ class Hedron extends FlxSpriteGroup
     super();
     initializeShadow();
     initializeBody();
+    initializeMuzzleFlash();
     initializeWeapon();
   }
 
   function fire() {
     weapon.fire();
     body.animation.play("fire", true);
+    muzzleFlash.animation.play("fire", true);
   }
 
   public override function update(deltaTime:Float) {
@@ -42,6 +46,9 @@ class Hedron extends FlxSpriteGroup
       fire();
       fireTimer = 0;
     }
+
+    muzzleFlash.x = body.x;
+    muzzleFlash.y = body.y;
   }
 
   function updateOscillation(deltaTime:Float) {
@@ -94,5 +101,26 @@ class Hedron extends FlxSpriteGroup
     body.height = shadow.height;
 
     originalOffset = body.offset.y;
+  }
+
+  function initializeMuzzleFlash() {
+    if (muzzleFlash == null) {
+      muzzleFlash = new FlxSprite();
+      muzzleFlash.loadGraphic("assets/images/hedron_flash.png", true, 32, 32);
+      muzzleFlash.animation.add("idle", [3]);
+      muzzleFlash.animation.add("fire", [0, 1, 2, 3], 20, false);
+      muzzleFlash.solid = false;
+      muzzleFlash.blend = BlendMode.ADD;
+      muzzleFlash.animation.play("idle");
+      add(muzzleFlash);
+    }
+    muzzleFlash.x = this.x;
+    muzzleFlash.y = this.y;
+
+    muzzleFlash.offset.x = muzzleFlash.width/2 - shadow.width/2;
+    muzzleFlash.offset.y = muzzleFlash.height/2 - shadow.width/2 + 16;
+
+    muzzleFlash.width = shadow.width;
+    muzzleFlash.height = shadow.height;
   }
 }
