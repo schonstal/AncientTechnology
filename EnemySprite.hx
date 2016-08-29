@@ -7,24 +7,20 @@ import flixel.FlxObject;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
 
-class PlayerSprite extends FlxSprite implements Vulnerable
+class EnemySprite extends FlxSprite implements Vulnerable
 {
-  var player:Player;
+  var enemy:Enemy;
 
-  public function new(player:Player) {
+  public function new(enemy:Enemy) {
     super();
-    loadGraphic("assets/images/player.png", true, 32, 32);
-    setFacingFlip(FlxObject.RIGHT, true, false);
-    setFacingFlip(FlxObject.LEFT, false, false);
+    loadGraphic("assets/images/enemy.png", true, 32, 32);
     animation.add("walk", [8,9,10,11,12,13,14,15], 10, true);
-    animation.add("walkBackwards", [23,16,17,18,19,21,22], 10, true);
     animation.add("idle", [0,1,2,3], 8);
-    animation.callback = onAnimate;
     width = 18;
     height = 8;
     offset.y = 28;
 
-    this.player = player;
+    this.enemy = enemy;
   }
 
   public override function update(deltaTime:Float) {
@@ -40,14 +36,6 @@ class PlayerSprite extends FlxSprite implements Vulnerable
   }
 
   public function takeDamage(amount:Float) {
-    player.hurt(amount);
-  }
-
-  function onAnimate(name:String, frame:Int, frameIndex:Int) {
-    if (name == "walk" || name == "walkBackwards") {
-      if (frame == 0 || frame == 4) {
-        FlxG.sound.play("assets/sounds/footsteps/" + Reg.random.int(1,2) + ".wav", 0.3);
-      }
-    }
+    enemy.hurt(amount);
   }
 }

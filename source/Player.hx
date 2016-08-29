@@ -23,6 +23,7 @@ class Player extends FlxSpriteGroup
     initializeShadow();
     initializeSprite();
     initializeHedron();
+    initializeStatus();
   }
 
   public override function update(deltaTime:Float) {
@@ -93,12 +94,16 @@ class Player extends FlxSpriteGroup
   }
 
   function initializeSprite() {
-    playerSprite = new PlayerSprite();
+    playerSprite = new PlayerSprite(this);
     add(playerSprite);
   }
 
   function initializeHedron() {
     hedron = new Hedron();
     add(hedron);
+  }
+
+  function initializeStatus() {
+    health = 100;
   }
 }

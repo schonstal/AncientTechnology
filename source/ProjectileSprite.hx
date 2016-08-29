@@ -11,7 +11,7 @@ class ProjectileSprite extends FlxSprite {
   var dangerTimer:Float = 0;
   var dangerTime:Float = 0.04;
 
-  public var onCollisionCallback:Void->Void;
+  public var onCollisionCallback:FlxObject->Void;
 
   public function new() {
     super();
@@ -24,8 +24,8 @@ class ProjectileSprite extends FlxSprite {
     height = HEIGHT;
   }
 
-  public function onCollide() {
-    if(onCollisionCallback != null) onCollisionCallback();
+  public function onCollide(other) {
+    if(onCollisionCallback != null) onCollisionCallback(other);
   }
 
   public function initialize(direction:FlxVector, speed:Float = Projectile.SPEED):Void {

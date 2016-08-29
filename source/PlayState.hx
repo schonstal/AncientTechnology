@@ -27,12 +27,11 @@ class PlayState extends FlxState
   }
 
   override public function update(deltaTime:Float):Void {
-    FlxG.collide(player, Reg.dungeon.collisionTilemap);
     super.update(deltaTime);
     FlxG.collide(player, Reg.dungeon.collisionTilemap);
 
     FlxG.collide(Reg.playerProjectileService.group, Reg.dungeon.wallTilemap, function(a,b):Void {
-      if(Std.is(a, ProjectileSprite)) a.onCollide();
+      if(Std.is(a, ProjectileSprite)) a.onCollide(b);
     });
 
     dungeonObjects.sort(FlxSort.byY, FlxSort.ASCENDING);

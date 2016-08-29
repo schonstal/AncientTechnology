@@ -19,6 +19,7 @@ class Projectile extends FlxSpriteGroup
   var shadow:FlxSprite;
   var projectileSprite:ProjectileSprite;
   var explosionSprite:FlxSprite;
+  var damage:Float = 10;
 
   public function new():Void {
     super();
@@ -47,7 +48,7 @@ class Projectile extends FlxSpriteGroup
     shadow.y = projectileSprite.y;
   }
 
-  public function onCollide():Void {
+  public function onCollide(b:FlxObject):Void {
     if(!physical) return;
     physical = false;
 
@@ -61,6 +62,10 @@ class Projectile extends FlxSpriteGroup
     explosionSprite.animation.play("explode");
     projectileSprite.exists = false;
     shadow.exists = false;
+
+    if (Std.is(b, Vulnerable)) {
+      b.hurt(damage);
+    }
   }
 
   function explosionFinished(_:String):Void {
@@ -69,7 +74,7 @@ class Projectile extends FlxSpriteGroup
   }
 
   public static function handleCollision(other, projectile):Void {
-    cast(projectile, ProjectileSprite).onCollide();
+    cast(projectile, ProjectileSprite).onCollide(other);
   }
 
   function initializeShadow() {
