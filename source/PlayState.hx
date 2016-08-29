@@ -22,6 +22,7 @@ class PlayState extends FlxState
     fillDungeon();
     add(new Reticle());
     add(new CameraObject(player.playerSprite));
+    add(new Enemy());
 
     setWorldBounds();
   }

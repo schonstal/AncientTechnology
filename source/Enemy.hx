@@ -1,66 +1,127 @@
 package;
 
-import flixel.addons.effects.FlxTrail;
-
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
-import flixel.math.FlxVector;
-import flixel.util.FlxSort;
-
 import flash.display.BlendMode;
+import flixel.group.FlxSpriteGroup;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.util.FlxTimer;
+import flixel.FlxObject;
+
+import flixel.math.FlxVector;
+import flixel.math.FlxPoint;
 
 class Enemy extends FlxSpriteGroup
 {
-  inline static var SPEED = 100;
+  var fireTimer:Float = 0;
 
-  public var enemySprite:EnemySprite;
-  public var shadow:FlxSprite;
+  var shadow:FlxSprite;
+  var body:EnemySprite;
+  var weapon:Weapon;
+  var muzzleFlash:FlxSprite;
+
+  var oscillator:Float;
+  var originalOffset:Float;
 
   public function new() {
     super();
+    initializeOscillation();
     initializeShadow();
-    initializeSprite();
-    initializeStatus();
+    initializeBody();
+    initializeMuzzleFlash();
+    initializeWeapon();
+  }
+
+  function fire() {
+    weapon.fire();
+    body.animation.play("fire", true);
+    muzzleFlash.animation.play("fire", true);
   }
 
   public override function update(deltaTime:Float) {
-    processMovement();
     super.update(deltaTime);
-    updateShadow();
+    updateOscillation(deltaTime);
+    updateWeapon();
+
+    fireTimer += deltaTime;
+    if (fireTimer >= weapon.fireRate && weapon.shouldFire(deltaTime)) {
+      fire();
+      fireTimer = 0;
+    }
+
+    muzzleFlash.x = body.x;
+    muzzleFlash.y = body.y;
   }
 
-  function processMovement() {
-    var direction:FlxVector = new FlxVector(0,0);
+  function initializeOscillation() {
+    oscillator = Reg.random.float(0, Math.PI * 2);
+  }
 
-    if(direction.length > 0) {
-      enemySprite.velocity.x = direction.normalize().x * SPEED;
-      enemySprite.velocity.y = direction.normalize().y * SPEED;
-      enemySprite.animation.play("walk");
-    } else {
-      enemySprite.velocity.x = enemySprite.velocity.y = 0;
-      enemySprite.animation.play("idle");
-    }
+  function updateOscillation(deltaTime:Float) {
+    oscillator += deltaTime;
+    body.offset.y = originalOffset + Math.sin(oscillator * 3);
+  }
+
+  public function updateShadow() {
+    shadow.x = body.x;
+    shadow.y = body.y;
+  }
+
+  function initializeWeapon() {
+    weapon = new PlasmaWeapon();
+  }
+
+  function updateWeapon() {
+    weapon.x = body.x;
+    weapon.y = body.y;
   }
 
   function initializeShadow() {
-    shadow = new FlxSprite();
-    shadow.loadGraphic("assets/images/player_shadow.png");
-    shadow.solid = false;
-    Reg.dungeon.shadowGroup.add(shadow);
+    if (shadow == null) {
+      shadow = new FlxSprite();
+      shadow.loadGraphic("assets/images/enemy_shadow.png");
+      shadow.solid = false;
+      Reg.dungeon.shadowGroup.add(shadow);
+    }
+    shadow.x = this.x;
+    shadow.y = this.y;
+    shadow.updateHitbox();
   }
 
-  function updateShadow() {
-    shadow.x = enemySprite.x;
-    shadow.y = enemySprite.y;
+  function initializeBody() {
+    if (body == null) {
+      body = new EnemySprite(this);
+      add(body);
+    }
+    body.x = this.x;
+    body.y = this.y;
+
+    body.offset.x = body.width/2 - shadow.width/2;
+    body.offset.y = body.height/2 - shadow.width/2 + 20;
+
+    body.width = shadow.width;
+    body.height = shadow.height;
+
+    originalOffset = body.offset.y;
   }
 
-  function initializeSprite() {
-    enemySprite = new EnemySprite();
-    add(enemySprite);
-  }
+  function initializeMuzzleFlash() {
+    if (muzzleFlash == null) {
+      muzzleFlash = new FlxSprite();
+      muzzleFlash.loadGraphic("assets/images/enemy_flash.png", true, 36, 36);
+      muzzleFlash.animation.add("idle", [3]);
+      muzzleFlash.animation.add("fire", [0, 1, 2, 3], 20, false);
+      muzzleFlash.solid = false;
+      muzzleFlash.blend = BlendMode.ADD;
+      muzzleFlash.animation.play("idle");
+      add(muzzleFlash);
+    }
+    muzzleFlash.x = this.x;
+    muzzleFlash.y = this.y;
 
-  function initializeStatus() {
-    health = 50;
+    muzzleFlash.offset.x = muzzleFlash.width/2 - shadow.width/2;
+    muzzleFlash.offset.y = muzzleFlash.height/2 - shadow.width/2 + 20;
+
+    muzzleFlash.width = shadow.width;
+    muzzleFlash.height = shadow.height;
   }
 }

@@ -13,26 +13,16 @@ class EnemySprite extends FlxSprite implements Vulnerable
 
   public function new(enemy:Enemy) {
     super();
-    loadGraphic("assets/images/enemy.png", true, 32, 32);
-    animation.add("walk", [8,9,10,11,12,13,14,15], 10, true);
-    animation.add("idle", [0,1,2,3], 8);
-    width = 18;
-    height = 8;
-    offset.y = 28;
+    loadGraphic("assets/images/enemy.png", true, 36, 36);
+    animation.add("idle", [0], 8);
+    animation.add("walk", [8], 10, true);
+    animation.add("fire", [13, 14, 15, 12], 10, false);
 
     this.enemy = enemy;
   }
 
   public override function update(deltaTime:Float) {
-    facing = FlxG.mouse.x < x + width/2 ? FlxObject.LEFT : FlxObject.RIGHT;
-    offset.x = (facing == FlxObject.RIGHT ? 6 : 8);
     super.update(deltaTime);
-  }
-
-  public function walkingBackwards():Bool {
-    return (velocity.x < 0 && facing == FlxObject.RIGHT) ||
-           (velocity.x > 0 && facing == FlxObject.LEFT) ||
-           (velocity.x == 0 && velocity.y < 0);
   }
 
   public function takeDamage(amount:Float) {
