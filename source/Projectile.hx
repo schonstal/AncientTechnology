@@ -29,8 +29,8 @@ class Projectile extends FlxSpriteGroup
     this.y = Y;
     this.direction = direction;
 
-    initializeShadow();
     initializeProjectile(direction);
+    initializeShadow();
     initializeExplosion();
 
     physical = true;
@@ -43,8 +43,8 @@ class Projectile extends FlxSpriteGroup
   }
 
   function updateShadow() {
-    shadow.x = projectileSprite.x - shadow.width/2 - projectileSprite.width/2;
-    shadow.y = projectileSprite.y + 5;
+    shadow.x = projectileSprite.x;
+    shadow.y = projectileSprite.y;
   }
 
   public function onCollide():Void {
@@ -79,6 +79,12 @@ class Projectile extends FlxSpriteGroup
     }
     shadow.x = this.x;
     shadow.y = this.y;
+
+    shadow.width = 6;
+    shadow.height = 6;
+
+    shadow.offset.x = 29 - 3;
+    shadow.offset.y = 20 - 3;
   }
 
   function initializeProjectile(direction:FlxVector) {
@@ -90,6 +96,7 @@ class Projectile extends FlxSpriteGroup
     projectileSprite.x = this.x;
     projectileSprite.y = this.y;
     projectileSprite.updateHitbox();
+    projectileSprite.offset.y += 16;
     projectileSprite.initialize(direction);
   }
 

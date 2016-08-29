@@ -18,15 +18,14 @@ class PlayerSprite extends FlxSprite
     animation.add("walkBackwards", [23,16,17,18,19,21,22], 10, true);
     animation.add("idle", [0,1,2,3], 8);
     animation.callback = onAnimate;
-    width = 22;
-    height = 12;
-    offset.x = 4;
-    offset.y = 20;
+    width = 18;
+    height = 8;
+    offset.y = 28;
   }
 
   public override function update(deltaTime:Float) {
     facing = FlxG.mouse.x < x + width/2 ? FlxObject.LEFT : FlxObject.RIGHT;
-    offset.x = (facing == FlxObject.RIGHT ? 4 : 6);
+    offset.x = (facing == FlxObject.RIGHT ? 6 : 8);
     super.update(deltaTime);
   }
 

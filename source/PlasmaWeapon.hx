@@ -12,15 +12,15 @@ class PlasmaWeapon extends Weapon
 {
   public function new() {
     super();
-    fireRate = 0.25;
+    fireRate = 0.3;
   }
 
-  override function fire(x:Float, y:Float) {
-    var direction = new FlxVector(FlxG.mouse.x - x, FlxG.mouse.y - y).normalize();
+  public override function fire() {
+    var direction = new FlxVector(FlxG.mouse.x - x, FlxG.mouse.y - y + 16).normalize();
     Reg.playerProjectileService.spawn(x, y, direction);
   }
 
-  override function shouldFire(deltaTime:Float):Bool {
+  public override function shouldFire(deltaTime:Float):Bool {
     return FlxG.mouse.justPressed;
   }
 }

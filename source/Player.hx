@@ -4,21 +4,11 @@ import flixel.addons.effects.FlxTrail;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxObject;
-
 import flixel.group.FlxSpriteGroup;
-import flixel.group.FlxGroup;
-
 import flixel.math.FlxVector;
-import flixel.math.FlxRandom;
+import flixel.util.FlxSort;
 
 import flash.display.BlendMode;
-
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxEase.EaseFunction;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxTween.TweenOptions;
-import flixel.tweens.misc.VarTween;
 
 class Player extends FlxSpriteGroup
 {
@@ -26,7 +16,7 @@ class Player extends FlxSpriteGroup
 
   public var hedron:Hedron;
   public var playerSprite:PlayerSprite;
-  var shadow:FlxSprite;
+  public var shadow:FlxSprite;
 
   public function new() {
     super();
@@ -80,8 +70,8 @@ class Player extends FlxSpriteGroup
   }
 
   function updateShadow() {
-    shadow.x = playerSprite.x + 2;
-    shadow.y = playerSprite.y + 7;
+    shadow.x = playerSprite.x;
+    shadow.y = playerSprite.y;
   }
 
   function updateHedron() {
@@ -95,6 +85,8 @@ class Player extends FlxSpriteGroup
     hedron.x = shadow.getMidpoint().x + direction.x * magnitude - hedron.width/2;
     hedron.y = shadow.getMidpoint().y + direction.y * magnitude - hedron.height/2;
     hedron.updateShadow();
+
+    sort(FlxSort.byY, FlxSort.ASCENDING);
   }
 
   function initializeSprite() {

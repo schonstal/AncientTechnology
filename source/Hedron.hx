@@ -12,7 +12,6 @@ import flixel.math.FlxPoint;
 class Hedron extends FlxSpriteGroup
 {
   var fireTimer:Float = 0;
-  var fireRate:Float = 0;
 
   var shadow:FlxSprite;
   var body:FlxSprite;
@@ -25,15 +24,24 @@ class Hedron extends FlxSpriteGroup
     super();
     initializeShadow();
     initializeBody();
+    initializeWeapon();
   }
 
   function fire() {
-
+    weapon.fire();
+    body.animation.play("fire", true);
   }
 
   public override function update(deltaTime:Float) {
     super.update(deltaTime);
     updateOscillation(deltaTime);
+    updateWeapon();
+
+    fireTimer += deltaTime;
+    if (fireTimer >= weapon.fireRate && weapon.shouldFire(deltaTime)) {
+      fire();
+      fireTimer = 0;
+    }
   }
 
   function updateOscillation(deltaTime:Float) {
@@ -44,6 +52,15 @@ class Hedron extends FlxSpriteGroup
   public function updateShadow() {
     shadow.x = body.x;
     shadow.y = body.y;
+  }
+
+  function initializeWeapon() {
+    weapon = new PlasmaWeapon();
+  }
+
+  function updateWeapon() {
+    weapon.x = body.x;
+    weapon.y = body.y;
   }
 
   function initializeShadow() {
@@ -63,7 +80,7 @@ class Hedron extends FlxSpriteGroup
       body = new FlxSprite();
       body.loadGraphic("assets/images/hedron.png", true, 32, 32);
       body.animation.add("idle", [0]);
-      body.animation.add("fire", [1, 1, 2, 3, 4], 20, false);
+      body.animation.add("fire", [1, 1, 2, 3, 4, 0], 20, false);
       body.solid = false;
       add(body);
     }
