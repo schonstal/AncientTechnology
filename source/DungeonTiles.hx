@@ -51,6 +51,10 @@ class DungeonTiles
           } else {
             tiles[localY][localX] = ((localY + localX) % 2 == 0 ? 1 : 2);
           }
+
+          if(Reg.random.bool(1)) {
+            Reg.enemyLocations.push(new FlxPoint(localX - Dungeon.SIZE/2, localY - Dungeon.SIZE/2));
+          }
         }
       }
       changeDirection();

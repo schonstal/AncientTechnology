@@ -66,12 +66,6 @@ class Projectile extends FlxSpriteGroup
     projectileSprite.exists = false;
     shadow.exists = false;
 
-    if (Std.is(b, PlayerSprite)) {
-      FlxG.log.add("hit player");
-      FlxG.log.add(b);
-      FlxG.log.add(projectileSprite);
-    }
-
     if (Std.is(b, Vulnerable)) {
       cast (b, Vulnerable).takeDamage(damage);
     }

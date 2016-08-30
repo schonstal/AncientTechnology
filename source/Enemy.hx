@@ -50,6 +50,19 @@ class Enemy extends FlxSpriteGroup
 
     muzzleFlash.x = body.x;
     muzzleFlash.y = body.y;
+
+    updateShadow();
+  }
+
+  public override function hurt(amount:Float) {
+    FlxG.log.add(amount);
+    health -= amount;
+    if (health <= 0) {
+      FlxG.camera.shake(0.005, 0.2);
+      exists = false;
+      shadow.exists = false;
+      body.exists = false;
+    }
   }
 
   function initializeOscillation() {
@@ -67,7 +80,7 @@ class Enemy extends FlxSpriteGroup
   }
 
   function initializeWeapon() {
-    weapon = new EnemyOmniWeapon();
+    weapon = new EnemyTargetWeapon();
   }
 
   function updateWeapon() {
