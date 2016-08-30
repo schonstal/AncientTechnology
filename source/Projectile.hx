@@ -11,8 +11,6 @@ import flash.display.BlendMode;
 
 class Projectile extends FlxSpriteGroup
 {
-  public inline static var SPEED = 450;
-
   public var direction:FlxVector;
   public var physical = true;
 
@@ -20,15 +18,19 @@ class Projectile extends FlxSpriteGroup
   var projectileSprite:ProjectileSprite;
   var explosionSprite:FlxSprite;
   var damage:Float = 10;
+  var style:String;
+  var speed:Float;
 
   public function new():Void {
     super();
   }
 
-  public function initialize(X:Float, Y:Float, direction:FlxVector):Void {
+  public function initialize(X:Float, Y:Float, direction:FlxVector, speed:Float, style:String):Void {
     this.x = X;
     this.y = Y;
     this.direction = direction;
+    this.style = style;
+    this.speed = speed;
 
     initializeProjectile(direction);
     initializeShadow();
@@ -49,7 +51,7 @@ class Projectile extends FlxSpriteGroup
   }
 
   public function onCollide(b:FlxObject):Void {
-    if(!physical) return;
+    if(!physical || (projectileSprite.x == 0 && projectileSprite.y == 0)) return;
     physical = false;
 
     explosionSprite.width = projectileSprite.width;
@@ -59,17 +61,26 @@ class Projectile extends FlxSpriteGroup
     explosionSprite.x = projectileSprite.x;
     explosionSprite.y = projectileSprite.y;
     explosionSprite.visible = true;
-    explosionSprite.animation.play("explode");
+    explosionSprite.animation.play('explode-$style', true);
+
     projectileSprite.exists = false;
     shadow.exists = false;
 
+    if (Std.is(b, PlayerSprite)) {
+      FlxG.log.add("hit player");
+      FlxG.log.add(b);
+      FlxG.log.add(projectileSprite);
+    }
+
     if (Std.is(b, Vulnerable)) {
-      b.hurt(damage);
+      cast (b, Vulnerable).takeDamage(damage);
     }
   }
 
   function explosionFinished(_:String):Void {
     explosionSprite.exists = false;
+    shadow.exists = false;
+    projectileSprite.exists = false;
     exists = false;
   }
 
@@ -81,21 +92,12 @@ class Projectile extends FlxSpriteGroup
     if (shadow == null) {
       shadow = new FlxSprite();
       shadow.loadGraphic("assets/images/projectile_shadow.png");
-//      shadow.blend = BlendMode.ADD;
-//      shadow.alpha = 0.2;
       shadow.solid = false;
       Reg.dungeon.shadowGroup.add(shadow);
     }
     shadow.x = this.x;
     shadow.y = this.y;
 
-    /*
-    shadow.width = 6;
-    shadow.height = 6;
-
-    shadow.offset.x = 29 - 3;
-    shadow.offset.y = 20 - 3;
-    */
     shadow.offset.x = 1;
   }
 
@@ -109,14 +111,15 @@ class Projectile extends FlxSpriteGroup
     projectileSprite.y = this.y;
     projectileSprite.updateHitbox();
     projectileSprite.offset.y += 16;
-    projectileSprite.initialize(direction);
+    projectileSprite.initialize(direction, speed, style);
   }
 
   function initializeExplosion() {
     if (explosionSprite == null) {
       explosionSprite = new FlxSprite();
       explosionSprite.loadGraphic("assets/images/projectile_explosions.png", true, 32, 32);
-      explosionSprite.animation.add("explode", [0, 1, 2, 3], 15, false);
+      explosionSprite.animation.add("explode-player", [0, 1, 2, 3], 15, false);
+      explosionSprite.animation.add("explode-enemy", [4, 5, 6, 7], 15, false);
       explosionSprite.blend = BlendMode.ADD;
       explosionSprite.solid = false;
       explosionSprite.animation.finishCallback = explosionFinished;

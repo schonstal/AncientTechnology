@@ -34,6 +34,10 @@ class Player extends FlxSpriteGroup
     sortEntities();
   }
 
+  public override function hurt(amount:Float) {
+    health -= amount;
+  }
+
   function sortEntities() {
     sort(FlxSort.byY, FlxSort.ASCENDING);
   }

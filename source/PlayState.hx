@@ -31,15 +31,29 @@ class PlayState extends FlxState
     super.update(deltaTime);
     FlxG.collide(player, Reg.dungeon.collisionTilemap);
 
-    FlxG.collide(Reg.playerProjectileService.group, Reg.dungeon.wallTilemap, function(a,b):Void {
-      if(Std.is(a, ProjectileSprite)) a.onCollide(b);
-    });
-
     dungeonObjects.sort(FlxSort.byY, FlxSort.ASCENDING);
+
+    collideProjectiles();
 
     if (FlxG.keys.justPressed.Q) {
       FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
     }
+  }
+
+  function collideProjectiles() {
+    //FlxG.overlap(Reg.playerProjectileService.group, enemies);
+
+    FlxG.collide(Reg.playerProjectileService.group, Reg.dungeon.wallTilemap, function(a,b):Void {
+      if(Std.is(a, ProjectileSprite)) a.onCollide(b);
+    });
+
+    FlxG.collide(Reg.enemyProjectileService.group, Reg.dungeon.wallTilemap, function(a,b):Void {
+      if(Std.is(a, ProjectileSprite)) a.onCollide(b);
+    });
+
+    FlxG.overlap(Reg.enemyProjectileService.group, player, function(a,b):Void {
+      if(Std.is(a, ProjectileSprite)) a.onCollide(b);
+    });
   }
 
   function registerServices() {

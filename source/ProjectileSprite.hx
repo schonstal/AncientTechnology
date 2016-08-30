@@ -17,8 +17,9 @@ class ProjectileSprite extends FlxSprite {
     super();
 
     loadGraphic('assets/images/projectiles.png', true, 32, 32);
-    animation.add("pulse", [0, 1], 10);
-    animation.play("pulse");
+    animation.add("pulse-player", [0, 1], 10);
+    animation.add("pulse-enemy", [2, 3], 10);
+    animation.play("pulse-player");
 
     width = WIDTH;
     height = HEIGHT;
@@ -28,10 +29,11 @@ class ProjectileSprite extends FlxSprite {
     if(onCollisionCallback != null) onCollisionCallback(other);
   }
 
-  public function initialize(direction:FlxVector, speed:Float = Projectile.SPEED):Void {
+  public function initialize(direction:FlxVector, speed:Float, style:String):Void {
     dangerTimer = 0;
     velocity.x = direction.x * speed;
     velocity.y = direction.y * speed;
+    animation.play('pulse-$style', true);
   }
 
   override public function updateHitbox():Void {

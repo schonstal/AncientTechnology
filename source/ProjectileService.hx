@@ -13,10 +13,10 @@ class ProjectileService {
     this.group = new FlxTypedGroup<Projectile>();
   }
 
-  public function spawn(X:Float, Y:Float, direction:FlxVector):Projectile {
+  public function spawn(X:Float, Y:Float, direction:FlxVector, speed:Float = 450, style:String = "player"):Projectile {
     for(object in objects) {
       if(!object.exists) {
-        object.initialize(X, Y, direction);
+        object.initialize(X, Y, direction, speed, style);
         return object;
       }
     }
@@ -25,7 +25,7 @@ class ProjectileService {
     objects.push(object);
     group.add(object);
 
-    object.initialize(X, Y, direction);
+    object.initialize(X, Y, direction, speed, style);
     return object;
   }
 }

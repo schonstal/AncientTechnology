@@ -67,7 +67,7 @@ class Enemy extends FlxSpriteGroup
   }
 
   function initializeWeapon() {
-    weapon = new PlasmaWeapon();
+    weapon = new EnemyOmniWeapon();
   }
 
   function updateWeapon() {
